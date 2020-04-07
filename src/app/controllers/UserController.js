@@ -53,15 +53,11 @@ class UserController {
 
         const userID = req.headers.authorization;
 
-        const userExist = await User.findOne({
-            where: { id: userID }
-        });
+        const user = await User.findByPk(userID);
 
-        if (!userExist) {
+        if (!user) {
             return res.status(400).json({ error: 'User does not exist' })
         }
-
-        const user = await User.findByPk(userID);
 
         if (email && email !== user.email) {
             const userExists = await User.findOne({ where: { email: email } });

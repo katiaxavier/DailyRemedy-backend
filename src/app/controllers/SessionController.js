@@ -1,19 +1,21 @@
-import connection from '../database/connection';
+import User from '../models/User';
 
 class SessionController {
-    async create(req, res) {
+    async store(req, res) {
         const { id } = req.body;
 
-        const user = await connection('users')
-            .where('id', id)
-            .select('name')
-            .first();
+        const user = await User.findByPk(id);
 
         if (!user) {
             return res.status(400).json({ error: 'No USER found with this ID' });
         }
 
-        return res.json(user);
+        const { name } = user;
+
+        return res.json({
+            id,
+            name
+        });
     }
 }
 

@@ -1,4 +1,7 @@
-import connection from '../database/connection';
+import * as Yup from 'yup';
+import { startOfHour, parseISO, format, subHours } from 'date-fns';
+import Remedy from '../models/Remedy';
+import User from '../models/User';
 
 class RemedyController {
     async index(req, res) {
@@ -7,20 +10,35 @@ class RemedyController {
         return res.json(remedys);
     }
 
-    async create(req, res) {
-        const { shift, description, remedy, amount, hours } = req.body;
-        const user_id = req.headers.authorization;
-
-        const [id] = await connection('remedys').insert({
-            shift,
-            description,
-            remedy,
-            amount,
-            hours,
-            user_id
+    async store(req, res) {
+        const schema = Yup.object().shape({
+            name: Yup.string().required(),
+            description: Yup.string(),
+            amount: Yup.string().required(),
+            hour: Yup.date().required(),
         });
 
-        return res.json({ id });
+        if (!(await schema.isValid(req.body))) {
+            return res.status(400).json({ error: 'Validation fails' });
+        }
+
+        const { name, description, amount, hour } = req.body;
+
+        const date = Number(hour);
+    
+        const userID = req.headers.authorization;
+
+        const { id } = await User.findByPk(userID);
+
+        const remedy = await Remedy.create({
+            user_id: id,
+            name,
+            description,
+            amount,
+            hour
+        });
+
+        return res.json({ remedy });
     }
 
     async delete(req, res) {

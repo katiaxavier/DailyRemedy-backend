@@ -15,7 +15,7 @@ class RemedyController {
             name: Yup.string().required(),
             description: Yup.string(),
             amount: Yup.string().required(),
-            hour: Yup.date().required(),
+            hour: Yup.string().required(),
         });
 
         if (!(await schema.isValid(req.body))) {
@@ -24,14 +24,18 @@ class RemedyController {
 
         const { name, description, amount, hour } = req.body;
 
-        const date = Number(hour);
-    
         const userID = req.headers.authorization;
 
-        const { id } = await User.findByPk(userID);
+        const user = await User.findByPk(userID);
+
+        if (!user) {
+            return res.status(400).json({ error: 'User does not exist' })
+        }
+
+        // const { id } = await User.findByPk(userID);
 
         const remedy = await Remedy.create({
-            user_id: id,
+            user_id: user.id,
             name,
             description,
             amount,

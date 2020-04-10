@@ -24,7 +24,7 @@ module.exports = {
       },
       hour: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       amount: {
         type: Sequelize.INTEGER,

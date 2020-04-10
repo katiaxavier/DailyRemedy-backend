@@ -6,7 +6,7 @@ class Remedy extends Model {
             {
                 name: Sequelize.STRING,
                 description: Sequelize.STRING,
-                hour: Sequelize.INTEGER,
+                hour: Sequelize.STRING,
                 amount: Sequelize.STRING,
             },
             {

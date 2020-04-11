@@ -1,12 +1,14 @@
-import connection from '../database/connection';
+import Remedy from '../models/Remedy'
 
 class ProfileController {
-    async index(req, res) {
+    async show(req, res) {
         const user_id = req.headers.authorization;
+        const remedys = await Remedy.findAll({
+            where: {
+                user_id
+            }
+        });
 
-        const remedys = await connection('remedys')
-            .where('user_id', user_id)
-            .select('*');
         return res.json(remedys);
     }
 }

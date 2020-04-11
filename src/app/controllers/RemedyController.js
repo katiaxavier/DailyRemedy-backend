@@ -58,16 +58,21 @@ class RemedyController {
         const { id } = req.params;
         const user_id = req.headers.authorization;
 
-        const remedy = await connection('remedys')
-            .where('id', id)
-            .select('user_id')
-            .first();
 
-        if (remedy.user_id !== user_id) {
-            return res.status(401).json({ error: 'Operation not permitted' });
+        const remedy = await Remedy.findOne({
+            where: {
+                id,
+                user_id
+            },
+        });
+
+        if (!remedy) {
+            return res.status(401).json({
+                error: "Nothing found.",
+            });
         }
 
-        await connection('remedys').where('id', id).delete();
+        await remedy.destroy();
 
         return res.status(204).send();
     }

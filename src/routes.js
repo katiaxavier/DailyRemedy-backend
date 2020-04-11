@@ -14,7 +14,7 @@ routes.put('/users', UserController.update);
 
 // routes.get('/remedys', RemedyController.index); 
 routes.post('/remedys', RemedyController.store); 
-// routes.delete('/remedys/:id', RemedyController.delete);
+routes.delete('/remedys/:id', RemedyController.delete);
 
 // routes.get('/profile', ProfileController.index);
 

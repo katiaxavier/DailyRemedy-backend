@@ -17,17 +17,21 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-      },   
+      },
       description: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      hour: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       amount: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      hour: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      shift: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       created_at: {

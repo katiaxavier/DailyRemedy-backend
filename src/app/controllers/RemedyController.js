@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, format, subHours } from 'date-fns';
+import { getHours, parseISO, startOfHour, subHours } from 'date-fns';
 import Remedy from '../models/Remedy';
 import User from '../models/User';
 
@@ -15,7 +15,7 @@ class RemedyController {
             name: Yup.string().required(),
             description: Yup.string(),
             amount: Yup.string().required(),
-            hour: Yup.string().required(),
+            hour: Yup.date().required(),
         });
 
         if (!(await schema.isValid(req.body))) {
@@ -32,14 +32,23 @@ class RemedyController {
             return res.status(400).json({ error: 'User does not exist' })
         }
 
-        // const { id } = await User.findByPk(userID);
+        const getHour = getHours(parseISO(hour));
+        const hourStart = startOfHour(parseISO(hour));
+
+        let turno = "";
+
+        turno = getHour <= 6 ? "Madrugada" : turno;
+        turno = getHour >= 6 ? "Manhã" : turno;
+        turno = getHour >= 12 ? "Tarde" : turno;
+        turno = getHour >= 18 ? "Noite" : turno;
 
         const remedy = await Remedy.create({
             user_id: user.id,
             name,
             description,
             amount,
-            hour
+            hour: hourStart,
+            shift: turno
         });
 
         return res.json({ remedy });

@@ -6,8 +6,9 @@ class Remedy extends Model {
             {
                 name: Sequelize.STRING,
                 description: Sequelize.STRING,
-                hour: Sequelize.STRING,
                 amount: Sequelize.STRING,
+                hour: Sequelize.DATE,
+                shift: Sequelize.STRING,
             },
             {
                 sequelize,
@@ -18,7 +19,7 @@ class Remedy extends Model {
 
     static associate(models) {
         this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
-      }
+    }
 }
 
 export default Remedy;
